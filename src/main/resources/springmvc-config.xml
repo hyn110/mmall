@@ -10,14 +10,9 @@
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     <!-- 设置使用注解的类所在的jar包 -->
-    <context:component-scan base-package="com.fmi110.mmall.controller"/>
+    <context:component-scan base-package="com.fmi110.mmall.controller,com.fmi110.mmall.configure"/>
     <mvc:annotation-driven/>
     <!--静态资源交给 defaultServlet 处理,否则访问静态资源会 404-->
     <mvc:default-servlet-handler/>
 
-    <!--spring 整合 swagger2 , 用户生成api文档-->
-    <bean id="swagger2Config"
-          class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration"/>
-    <mvc:resources location="classpath*:/META-INF/resources/" mapping="swagger-ui.html"/>
-    <mvc:resources location="classpath*:/META-INF/resources/webjars/" mapping="/webjars/**"/>
 </beans>

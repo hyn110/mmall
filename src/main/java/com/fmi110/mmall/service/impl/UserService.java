@@ -49,10 +49,14 @@ public class UserService implements IUserService {
             log.info("用户名不存在,{}", JsonUtils.toJson(username));
             return ServerResponse.createByErrorMessage("用户名不存在");
         }
+        // 加密密码
+        password = DigestUtils.md5Hex(password);
         User user = userMapper.login(username, password);
         if (user == null) {
             return ServerResponse.createByErrorMessage("密码错误");
         }
+        // 清除密码回传!!!
+        user.setPassword(null);
         return ServerResponse.createBySuccess("登录成功", user);
     }
 
@@ -115,7 +119,7 @@ public class UserService implements IUserService {
             return ServerResponse.createByErrorMessage("参数错误");
         }
         log.warn("方法参数不对 : checkValid({}, {})", str, type);
-        return ServerResponse.createBySuccessMessage("校验成功");
+        return ServerResponse.createBySuccessMessage("数据可以使用");
     }
 
     /**
@@ -130,9 +134,9 @@ public class UserService implements IUserService {
     @Override
     public ServerResponse selectQuestion(String username) {
 
-        ServerResponse<String> response = this.checkValid(username, Const.USERNAME);
-        if (!response.isSuccess()) {
-            return response;
+        ServerResponse<String> response = this.checkValid(username, Const.USERNAME); //
+        if (response.isSuccess()) { // 数据合法,说明用户名不存在.返回
+            return ServerResponse.createByErrorMessage("用户名不存在");
         }
 
         String question = userMapper.selectQuestion(username);
@@ -250,6 +254,7 @@ public class UserService implements IUserService {
          * 新建一个用户,填充要修改的字段,防止误修改
          */
         User updateUser = new User();
+        updateUser.setId(user.getId());
         updateUser.setAnswer(user.getAnswer());
         updateUser.setEmail(user.getEmail());
         if (StringUtils.isNotBlank(user.getPhone()))

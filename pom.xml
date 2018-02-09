@@ -83,7 +83,6 @@
         </dependency>
 
 
-
         <!--切面相关-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -249,6 +248,19 @@
 
     <build>
         <finalName>mmall</finalName>
+
+     <resources>
+         <resource>
+             <directory>src/main/java</directory>
+             <includes>
+                 <include>**/*.xml</include>
+             </includes>
+         </resource>
+         <resource>
+             <directory>src/main/resources</directory>
+         </resource>
+     </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
